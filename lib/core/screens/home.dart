@@ -213,8 +213,8 @@ double _calculateDistance(LatLng p1, LatLng p2) {
     double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
     double bearing = atan2(y, x);
 
-    bearing = bearing * (180 / pi); // رجّعها بالدرجات
-    return (bearing + 360) % 360; // باش تكون بين 0 و 360
+    bearing = bearing * (180 / pi); 
+    return (bearing + 360) % 360; 
   }
 
   //   Future<void> _loadMapStyle () async {
@@ -286,8 +286,8 @@ double _calculateDistance(LatLng p1, LatLng p2) {
                     markers: markers,
                     polylines: {
                       Polyline(
-                        polylineId: PolylineId("routeCasa"),
-                        color: Colors.red,
+                        polylineId: PolylineId("route"),
+                        color: Colors.orange,
                         width: 5,
                         points: polylineCoordinates
                       )
@@ -365,7 +365,7 @@ double _calculateDistance(LatLng p1, LatLng p2) {
                                 final lon = citie.value['lon'];
                                 _column.add(
                                   SizedBox(
-                                    width: width, // ياخد العرض كامل
+                                    width: width, 
                                     child: ElevatedButton(
                                       onPressed: () {
                                         LatLng newDirection = LatLng(
@@ -379,17 +379,17 @@ double _calculateDistance(LatLng p1, LatLng p2) {
                                         });
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.transparent, // الخلفية شفافة
-                                        shadowColor: Colors.transparent,      // بدون shadow
-                                        elevation: 0,                         // بدون ارتفاع
+                                        backgroundColor: Colors.transparent, 
+                                        shadowColor: Colors.transparent,      
+                                        elevation: 0,                         
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(0), // بدون زوايا
+                                          borderRadius: BorderRadius.circular(0), 
                                         ),
                                       ),
                                       child: Text(
                                         cityName,
                                         style: const TextStyle(
-                                          color: Colors.black, // اللون ديال النص (اختياري)
+                                          color: Colors.black, 
                                         ),
                                       ),
                                     ),
@@ -448,12 +448,10 @@ double _calculateDistance(LatLng p1, LatLng p2) {
     }
 
     await _getRoutePolyline(position!, direction!);
-    // await _getRoutePolyline(position!, LatLng(33.573110, -7.589843));
 
     positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.high,distanceFilter: 5)).listen((Position position) async {
       log.log('الموقع الجديد: ${position.latitude}, ${position.longitude}');
       await _getRoutePolyline(position, direction!);
-      // await _getRoutePolyline(position, LatLng(33.573110, -7.589843));
     });
     
     if (boxOpened && mounted) {
@@ -480,26 +478,17 @@ double _calculateDistance(LatLng p1, LatLng p2) {
     if (inputPos == null) {
       return 0.0;
     }
-
-    // 2. جلب معلومات الـ Media Query
     final mediaQuery = MediaQuery.of(context);
 
-    // 3. ارتفاع الشاشة الكلي (ماشي بالضرورة محتاجين ليه)
     final screenHeight = mediaQuery.size.height;
     
-    // 4. ارتفاع الـ Keyboard (Height of System UI that overlays the view)
-    final keyboardHeight = mediaQuery.viewInsets.bottom; // <--- هادي هي المفتاح
+    final keyboardHeight = mediaQuery.viewInsets.bottom;
 
-    // 5. تحديد إحداثيات قاع الـ Viewport (الحد الأقصى لي ممكن الـ Widget يوصل ليه)
-    // هاد القيمة كاتنقص من حجم الشاشة حسب الـ Keyboard Height.
     final viewportBottomEdge = screenHeight - keyboardHeight;
 
-    // 6. تحديد الـ Coordinate ديال قاع الـ Widget (Widget Bottom Y)
     final position = inputPos.localToGlobal(Offset.zero);
     final widgetBottomY = position.dy + inputPos.size.height;
 
-    // 7. حساب المسافة من القاع ديال الـ Viewport حتى لـ قاع الـ Widget
-    // هادشي كايعني شحال الـ Widget بعيد على حافة الـ Keyboard
     final distance = viewportBottomEdge - widgetBottomY;
 
     return distance;
